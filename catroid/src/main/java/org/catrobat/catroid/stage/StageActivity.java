@@ -1967,9 +1967,11 @@ public class StageActivity extends AndroidApplication implements ContextProvider
 
     private void configureStageWindowForEdgeToEdge() {
         Window window = getWindow();
-        // Keep the status bar hidden even on Android versions where the exported template's
-        // merged theme does not retain windowFullscreen at runtime.
-        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // The exported template can lose windowFullscreen during manifest/resource merging.
+        // Keep this fallback limited to exported APK flavors; editor behavior stays unchanged.
+        if ("standalone".equals(BuildConfig.FLAVOR) || "apktemplate".equals(BuildConfig.FLAVOR)) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
         WindowCompat.setDecorFitsSystemWindows(window, false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -1982,7 +1984,9 @@ public class StageActivity extends AndroidApplication implements ContextProvider
 
     private void hideStageSystemBars() {
         Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if ("standalone".equals(BuildConfig.FLAVOR) || "apktemplate".equals(BuildConfig.FLAVOR)) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
         WindowInsetsControllerCompat controller =
                 WindowCompat.getInsetsController(window, window.getDecorView());
         controller.setSystemBarsBehavior(
@@ -1995,7 +1999,7 @@ public class StageActivity extends AndroidApplication implements ContextProvider
         super.onWindowFocusChanged(hasFocus);
         // LibGDX's SurfaceView can regain window focus after Activity.onResume().
         // Re-apply immersive mode at that point so the status bar cannot remain visible.
-        if (hasFocus) {
+        if (hasFocus && ("standalone".equals(BuildConfig.FLAVOR) || "apktemplate".equals(BuildConfig.FLAVOR))) {
             hideStageSystemBars();
         }
     }
