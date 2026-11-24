@@ -8,6 +8,11 @@
         tools:replace="android:theme"
         android:theme="@style/Catroid">
 
+        <activity
+            android:name="org.catrobat.catroid.stage.StageActivity"
+            android:theme="@style/Theme.NewCatroid.Stage.Export"
+            tools:replace="android:theme" />
+
         <!-- Эта секция останется для удаления intent-filter'ов -->
         <activity
             android:name=".ui.ProjectListActivity"

@@ -4,6 +4,11 @@
 
     <application>
         <activity
+            android:name="org.catrobat.catroid.stage.StageActivity"
+            android:theme="@style/Theme.NewCatroid.Stage.Export"
+            tools:replace="android:theme" />
+
+        <activity
             android:name="org.catrobat.catroid.ui.MainMenuActivity"
             android:theme="@style/AppTheme.ApkTemplate.Splash"
             tools:replace="android:theme" />

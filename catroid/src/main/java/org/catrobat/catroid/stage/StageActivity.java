@@ -1986,7 +1986,13 @@ public class StageActivity extends AndroidApplication implements ContextProvider
     }
 
     void calculateScreenSizes() {
-        ScreenValueHandler.updateScreenWidthAndHeight(getContext());
+        // Standalone/export APKs must use the complete display bounds even before immersive
+        // system bars are hidden. Keep the editor on its existing window-metrics path.
+        if ("standalone".equals(BuildConfig.FLAVOR) || "apktemplate".equals(BuildConfig.FLAVOR)) {
+            ScreenValueHandler.updatePhysicalScreenWidthAndHeight(getContext());
+        } else {
+            ScreenValueHandler.updateScreenWidthAndHeight(getContext());
+        }
 
         Resolution projectResolution = new Resolution(
                 ProjectManager.getInstance().getCurrentProject().getXmlHeader().getVirtualScreenWidth(),

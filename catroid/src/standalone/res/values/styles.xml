@@ -808,4 +808,9 @@
 
 
     <!-- END -->
+    <!-- The standalone flavor inherits the scene theme but opts into camera-cutout drawing. -->
+    <style name="Theme.NewCatroid.Stage.Export" parent="@style/Theme.NewCatroid.Stage">
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>
