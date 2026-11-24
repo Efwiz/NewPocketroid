@@ -36,6 +36,28 @@ public final class ScreenValueHandler {
 		throw new AssertionError();
 	}
 
+	/**
+	 * Reads maximum display bounds for exported scene APKs without subtracting
+	 * status/navigation bar or display-cutout insets.
+	 */
+	public static void updatePhysicalScreenWidthAndHeight(Context context) {
+		if (context != null) {
+			WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+				Rect bounds = windowManager.getMaximumWindowMetrics().getBounds();
+				ScreenValues.currentScreenResolution = new Resolution(bounds.width(), bounds.height());
+			} else {
+				DisplayMetrics displayMetrics = new DisplayMetrics();
+				windowManager.getDefaultDisplay().getRealMetrics(displayMetrics);
+				ScreenValues.currentScreenResolution =
+						new Resolution(displayMetrics.widthPixels, displayMetrics.heightPixels);
+			}
+		} else {
+			ScreenValues.setToDefaultScreenSize();
+		}
+	}
+
 	public static void updateScreenWidthAndHeight(Context context) {
 		if (context != null) {
 			WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);

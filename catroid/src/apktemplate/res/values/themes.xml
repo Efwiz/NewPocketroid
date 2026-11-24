@@ -3,4 +3,9 @@
     <style name="AppTheme.ApkTemplate.Splash" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@android:color/black</item>
     </style>
+    <!-- This theme is used only by APKs generated from the export template. -->
+    <style name="Theme.NewCatroid.Stage.Export" parent="@style/Theme.NewCatroid.Stage">
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>
