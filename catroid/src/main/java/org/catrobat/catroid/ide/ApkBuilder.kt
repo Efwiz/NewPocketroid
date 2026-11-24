@@ -9,6 +9,7 @@ import com.reandroid.arsc.container.SpecTypePair
 import com.reandroid.arsc.model.ResourceEntry
 import com.reandroid.arsc.value.Entry
 import com.reandroid.arsc.value.ResValue
+import org.catrobat.catroid.apkbuild.StageApkThemePatcher
 import java.io.File
 import java.io.FileOutputStream
 import java.security.KeyStore
@@ -62,6 +63,7 @@ object ApkBuilder {
             }
 
             apkModule = ApkModule.loadApkFile(tempApk)
+            StageApkThemePatcher.enableCutoutDrawing(apkModule!!)
 
 
             onProgress("Внедрение кода...")
