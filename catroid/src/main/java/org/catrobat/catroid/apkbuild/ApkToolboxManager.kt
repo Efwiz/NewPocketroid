@@ -60,6 +60,7 @@ object ApkToolboxManager {
     fun customizeApk(apkPath: String, options: BuildOptions): Boolean {
         return modifyApk(apkPath) { module ->
             val manifest = module.androidManifestBlock
+            StageApkThemePatcher.enableCutoutDrawing(module)
             val oldPackage = manifest.packageName
             val newPackage = options.packageName
 
