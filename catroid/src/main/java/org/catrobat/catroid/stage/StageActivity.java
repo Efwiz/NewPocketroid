@@ -63,6 +63,8 @@ import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -151,6 +153,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.preference.PreferenceManager;
 import androidx.test.espresso.idling.CountingIdlingResource;
 
@@ -315,7 +320,7 @@ public class StageActivity extends AndroidApplication implements ContextProvider
 		}
 
 		super.onCreate(savedInstanceState);
-
+		configureStageWindowForEdgeToEdge();
 
 		rootLayout = new FrameLayout(this);
 		cameraContainer = new FrameLayout(this);
@@ -412,6 +417,8 @@ public class StageActivity extends AndroidApplication implements ContextProvider
         } else {
             setContentView(rootLayout);
         }
+
+        hideStageSystemBars();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
             rootLayout.setOnApplyWindowInsetsListener((v, insets) -> {
@@ -1655,6 +1662,7 @@ public class StageActivity extends AndroidApplication implements ContextProvider
         isAppPaused = false;
 		StageLifeCycleController.stageResume(this);
 		super.onResume();
+		hideStageSystemBars();
 		activeStageActivity = new WeakReference<>(this);
 
 		if (surveyCampaign != null) {
@@ -1956,6 +1964,26 @@ public class StageActivity extends AndroidApplication implements ContextProvider
 	public boolean isResizePossible() {
 		return resizePossible;
 	}
+
+    private void configureStageWindowForEdgeToEdge() {
+        Window window = getWindow();
+        WindowCompat.setDecorFitsSystemWindows(window, false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            WindowManager.LayoutParams attributes = window.getAttributes();
+            attributes.layoutInDisplayCutoutMode =
+                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            window.setAttributes(attributes);
+        }
+    }
+
+    private void hideStageSystemBars() {
+        WindowInsetsControllerCompat controller =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        controller.setSystemBarsBehavior(
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        controller.hide(WindowInsetsCompat.Type.systemBars());
+    }
 
     void calculateScreenSizes() {
         ScreenValueHandler.updateScreenWidthAndHeight(getContext());

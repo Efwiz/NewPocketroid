@@ -23,6 +23,8 @@
 package org.catrobat.catroid.utils;
 
 import android.content.Context;
+import android.graphics.Rect;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
@@ -37,9 +39,16 @@ public final class ScreenValueHandler {
 	public static void updateScreenWidthAndHeight(Context context) {
 		if (context != null) {
 			WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-			DisplayMetrics displayMetrics = new DisplayMetrics();
-			windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-			ScreenValues.currentScreenResolution = new Resolution(displayMetrics.widthPixels, displayMetrics.heightPixels);
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+				Rect bounds = windowManager.getCurrentWindowMetrics().getBounds();
+				ScreenValues.currentScreenResolution = new Resolution(bounds.width(), bounds.height());
+			} else {
+				DisplayMetrics displayMetrics = new DisplayMetrics();
+				windowManager.getDefaultDisplay().getRealMetrics(displayMetrics);
+				ScreenValues.currentScreenResolution =
+						new Resolution(displayMetrics.widthPixels, displayMetrics.heightPixels);
+			}
 		} else {
 			ScreenValues.setToDefaultScreenSize();
 		}
