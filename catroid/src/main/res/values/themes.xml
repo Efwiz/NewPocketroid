@@ -115,6 +115,8 @@
 
     <style name="Theme.NewCatroid.Stage" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowFullscreen">true</item>
+        <!-- Exported scenes must draw into the display-cutout area as well. -->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/app_background</item>
 
