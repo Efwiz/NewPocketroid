@@ -1977,6 +1977,15 @@ public class StageActivity extends AndroidApplication implements ContextProvider
         }
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            configureStageWindowForEdgeToEdge();
+            hideStageSystemBars();
+        }
+    }
+
     private void hideStageSystemBars() {
         WindowInsetsControllerCompat controller =
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
