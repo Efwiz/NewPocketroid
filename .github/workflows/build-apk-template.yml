@@ -18,12 +18,12 @@ permissions:
   contents: write
 
 concurrency:
-  group: apk-template-2-2-0-r1
+  group: apk-template-2-3-0
   cancel-in-progress: false
 
 jobs:
   build-template:
-    name: Build APK template 2.2.0-r1
+    name: Build APK template 2.3.0
     runs-on: ubuntu-latest
     env:
       _JAVA_OPTIONS: "-Xmx5g"
@@ -62,21 +62,21 @@ jobs:
             exit 1
           fi
           mkdir -p dist
-          cp "$APK_PATH" "dist/NewCatroid_APKTemplate_2-2-0r1.apk"
-          test -s "dist/NewCatroid_APKTemplate_2-2-0r1.apk"
-          ls -lh "dist/NewCatroid_APKTemplate_2-2-0r1.apk"
+          cp "$APK_PATH" "dist/NewCatroid_APKTemplate_2-3-0.apk"
+          test -s "dist/NewCatroid_APKTemplate_2-3-0.apk"
+          ls -lh "dist/NewCatroid_APKTemplate_2-3-0.apk"
 
       - name: Publish template Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: 2.2.0-r1
+          tag_name: 2.3.0
           target_commitish: ${{ github.sha }}
-          name: NewCatroid APK Template 2.2.0-r1
+          name: NewCatroid APK Template 2.3.0
           body: |
-            Maintenance release of the NewCatroid APK template.
+            NewCatroid APK template 2.3.0.
 
-            Includes the exported-stage immersive focus handling and the display-cutout
-            resource patcher. APK generation and physical-device behavior still require
-            validation on the target device.
-          files: dist/NewCatroid_APKTemplate_2-2-0r1.apk
+            Includes exported-stage immersive focus handling and the display-cutout
+            resource patcher. The build completed in GitHub Actions; physical-device
+            verification is still required.
+          files: dist/NewCatroid_APKTemplate_2-3-0.apk
           fail_on_unmatched_files: true
