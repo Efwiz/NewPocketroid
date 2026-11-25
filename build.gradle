@@ -30,6 +30,9 @@ buildscript {
     ext.jacoco_core_version = '0.8.7'
     repositories {
         google()
+        // Prefer the Google-hosted Maven Central mirror to avoid Maven Central HTTP 429 rate limits.
+        // Keep Maven Central as fallback if an artifact is not available from the mirror.
+        maven { url "https://maven-central.storage-download.googleapis.com/maven2/" }
         mavenCentral()
         maven { url "https://developer.huawei.com/repo/" }
         maven { url 'https://jitpack.io' }
