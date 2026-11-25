@@ -20,7 +20,7 @@ permissions:
 
 concurrency:
   group: apk-template-2-3-0
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build-template:
