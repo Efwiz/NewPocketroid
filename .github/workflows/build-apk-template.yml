@@ -3,6 +3,7 @@ name: Build and publish APK template
 on:
   push:
     branches:
+      - main
       - fix/apk-template-fullscreen-2-3-0
     paths:
       - "catroid/**"
