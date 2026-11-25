@@ -1965,8 +1965,16 @@ public class StageActivity extends AndroidApplication implements ContextProvider
 		return resizePossible;
 	}
 
+    private boolean isExportedApkFlavor() {
+        return "standalone".equals(BuildConfig.FLAVOR) || "apktemplate".equals(BuildConfig.FLAVOR);
+    }
+
     private void configureStageWindowForEdgeToEdge() {
         Window window = getWindow();
+        if (isExportedApkFlavor()) {
+            // Keep exported scenes fullscreen even if LibGDX or a theme re-applies system bars.
+            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
         WindowCompat.setDecorFitsSystemWindows(window, false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -1977,9 +1985,24 @@ public class StageActivity extends AndroidApplication implements ContextProvider
         }
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        // The LibGDX SurfaceView may regain focus after Activity.onResume().
+        // Re-apply immersive mode only to exported APKs; do not alter editor window behavior.
+        if (hasFocus && isExportedApkFlavor()) {
+            configureStageWindowForEdgeToEdge();
+            hideStageSystemBars();
+        }
+    }
+
     private void hideStageSystemBars() {
+        Window window = getWindow();
+        if (isExportedApkFlavor()) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
         WindowInsetsControllerCompat controller =
-                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+                WindowCompat.getInsetsController(window, window.getDecorView());
         controller.setSystemBarsBehavior(
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         controller.hide(WindowInsetsCompat.Type.systemBars());
